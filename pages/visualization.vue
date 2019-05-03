@@ -18,10 +18,10 @@ export default {
     'v-chart': ECharts
   },
   async asyncData({ $axios }) {
-    const genres = new Map((await $axios.get('/api/genres')).data)
-    const keywords = new Map((await $axios.get('/api/keywords')).data)
-    const genreDistributionData = (await $axios.get('/api/genre-distribution')).data
-    const keywordDistributionData = (await $axios.get('/api/keyword-distribution')).data
+    const genres = new Map((await $axios.$get('/api/genres')).data)
+    const keywords = new Map((await $axios.$get('/api/keywords')).data)
+    const genreDistributionData = (await $axios.$get('/api/genre-distribution')).data
+    const keywordDistributionData = (await $axios.$get('/api/keyword-distribution')).data
 
     return {
       genreDistribution: {
