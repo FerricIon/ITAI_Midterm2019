@@ -63,37 +63,37 @@ function convertToJSON(pathMovies, pathCredits) {
   })
 
   // productionCompanies
-  if (!fs.existsSync('./production_companies.json')) {
+  if (!fs.existsSync('../data/productionCompanies.json')) {
     const pcMap = new Map()
     u.forEach(({ production_companies }) => {
       production_companies.forEach(({ id, name }) => {
         pcMap.set(id, name)
       })
     })
-    fs.writeFile('production_companies.json', JSON.stringify([...pcMap].sort((a, b) => a[0] - b[0])))
+    fs.writeFile('../data/productionCompanies.json', JSON.stringify([...pcMap].sort((a, b) => a[0] - b[0])))
   }
   // genres
-  if (!fs.existsSync('./genres.json')) {
+  if (!fs.existsSync('../data/genres.json')) {
     const gMap = new Map()
     u.forEach(({ genres }) => {
       genres.forEach(({ id, name }) => {
         gMap.set(id, name)
       })
     })
-    fs.writeFile('genres.json', JSON.stringify([...gMap].sort((a, b) => a[0] - b[0])))
+    fs.writeFile('../data/genres.json', JSON.stringify([...gMap].sort((a, b) => a[0] - b[0])))
   }
   // keywords
-  if (!fs.existsSync('./keywords.json')) {
+  if (!fs.existsSync('../data/keywords.json')) {
     const kMap = new Map()
     u.forEach(({ keywords }) => {
       keywords.forEach(({ id, name }) => {
         kMap.set(id, name)
       })
     })
-    fs.writeFile('keywords.json', JSON.stringify([...kMap].sort((a, b) => a[0] - b[0])))
+    fs.writeFile('../data/keywords.json', JSON.stringify([...kMap].sort((a, b) => a[0] - b[0])))
   }
   // credits
-  if (!fs.existsSync('credits.json')) {
+  if (!fs.existsSync('../data/credits.json')) {
     const cMap = new Map()
     u.forEach(({ credits }) => {
       credits.cast.forEach(({ id, name }) => {
@@ -103,22 +103,75 @@ function convertToJSON(pathMovies, pathCredits) {
         cMap.set(id, name)
       })
     })
-    fs.writeFile('credits.json', JSON.stringify([...cMap].sort((a, b) => a[0] - b[0])))
+    fs.writeFile('../data/credits.json', JSON.stringify([...cMap].sort((a, b) => a[0] - b[0])))
+  }
+  // job
+  if (!fs.existsSync('../data/jobs.txt')) {
+    const jSet = new Set()
+    u.forEach((o) => {
+      o.credits.crew.forEach((c) => {
+        jSet.add(c.job)
+      })
+    })
+    fs.writeFile('../data/jobs.txt', [...jSet].join('\n'))
+  }
+  // spoken language
+  if (!fs.existsSync('../data/spokenLanguages.json')) {
+    const sSet = new Set()
+    u.forEach(({ spoken_languages }) => {
+      spoken_languages.forEach(({ name }) => {
+        sSet.add(name)
+      })
+    })
+    fs.writeFile('../data/spokenLanguages.json', JSON.stringify([...sSet]))
   }
 
   // visualization
-  if (!fs.existsSync('./visualization.json')) {
+  if (!fs.existsSync('../data/visualization.json')) {
     const vU = u.map(o => ({
       genres: o.genres.map(({ id }) => id),
       keywords: o.keywords.map(({ id }) => id),
       releaseYear: o.release_date.getFullYear()
     }))
-    fs.writeFile('visualization.json', JSON.stringify(vU))
+    fs.writeFile('../data/visualization.json', JSON.stringify(vU))
   }
   // recommendation
-  
-  // vote
-
+  if (!fs.existsSync('../data/recommendation.json')) {
+    const acceptableJobs = ['Director', 'Editor']
+    const rU = u.map(o => ({
+      id: o.id,
+      genre: o.genres.map(({ id }) => id),
+      cast: o.credits.cast.slice(0, 5).map(({ id }) => id),
+      crew: o.credits.crew.filter(o => !!~acceptableJobs.indexOf(o.job)).map(({ id }) => id),
+      production_companies: o.production_companies.map(({ id }) => id),
+      keywords: o.keywords.map(({ id }) => id),
+      spoken_languages: o.spoken_languages.map(({ name }) => name),
+      runtime: o.runtime,
+      revenue: o.revenue,
+      rate_average: o.vote_average,
+      rate_count: o.vote_count,
+      popularity: o.popularity
+    }))
+    fs.writeFile('../data/recommendation.json', JSON.stringify(rU))
+  }
+  // rate
+  if (!fs.existsSync('../data/rate.json')) {
+    const acceptableJobs = ['Director', 'Editor']
+    const rU = u.map(o => ({
+      id: o.id,
+      budge: o.budget,
+      revenue: o.revenue,
+      runtime: o.runtime,
+      releaseYear: o.release_date.getFullYear(),
+      genre: o.genres.map(({ id }) => id),
+      cast: o.credits.cast.slice(0, 5).map(({ id }) => id),
+      crew: o.credits.crew.filter(o => !!~acceptableJobs.indexOf(o.job)).map(({ id }) => id),
+      production_companies: o.production_companies.map(({ id }) => id),
+      rate_average: o.vote_average,
+      rate_count: o.vote_count
+    }))
+    fs.writeFile('../data/rate.json', JSON.stringify(rU))
+  }
 }
 
 /**
@@ -171,28 +224,41 @@ function csvLoadMovies(pathInfo, pathCredits) {
 
   return data
 }
+function movies() {
+  return new Map(require('../data/movies.json').map(o => [o.id, o]))
+}
 function credits() {
-  return new Map(require('./credits.json'))
+  return new Map(require('../data/credits.json'))
 }
 function genres() {
-  return new Map(require('./genres.json'))
+  return new Map(require('../data/genres.json'))
 }
 function keywords() {
-  return new Map(require('./keywords.json'))
+  return new Map(require('../data/keywords.json'))
 }
 function productionCompanies() {
-  return new Map(require('./production_companies.json'))
+  return new Map(require('../data/productionCompanies.json'))
 }
+function spokenLanguages() {
+  return require('../data/spokenLanguages.json')
+}
+
 function visualization() {
-  return require('./visualization.json')
+  return require('../data/visualization.json')
+}
+function recommendation1() {
+  return new Map(require('../data/recommendation.json').map(o => [o.id, o]))
 }
 
 module.exports = {
   convertToJSON,
+  movies,
   credits,
   genres,
   keywords,
   productionCompanies,
+  spokenLanguages,
   visualization,
+  recommendation1,
   csvLoadMovies
 }

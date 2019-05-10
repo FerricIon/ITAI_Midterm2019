@@ -1,4 +1,5 @@
 require('./jsDoc')
+const loader = require('./loader')
 
 /**
  * get genre distribution
@@ -57,8 +58,47 @@ function getKeywordDistribution(movies) {
     distribution: [...decadeMap].map(([id, count]) => ({ id, count }))
   })).sort((a, b) => a.decade - b.decade)
 }
+function searchForCredit(word) {
+  word = word.toLowerCase()
+  const credits = loader.credits()
+  const matched = []
+  for (const x of credits) {
+    if (x[1].toLowerCase().indexOf(word) !== -1) {
+      matched.push(x)
+    }
+    if (matched.length === 20) {
+      break
+    }
+  }
+  return matched
+}
+function recommendation1(data) {
+  const { spawnSync } = require('child_process')
+  const { stdout, stderr } = spawnSync('python', ['recommend function.py'], {
+    cwd: './server/python',
+    input: data
+  })
+  if (stderr.length) {
+    console.log(stderr.toString())
+  }
+  return stdout.toString()
+}
+function rec1GetMovie(id) {
+  const {
+    original_title,
+    vote_average
+  } = loader.movies().get(id)
+  return {
+    id,
+    originalTitle: original_title,
+    voteAverage: vote_average
+  }
+}
 
 module.exports = {
   getGenreDistribution,
-  getKeywordDistribution
+  getKeywordDistribution,
+  searchForCredit,
+  recommendation1,
+  rec1GetMovie
 }
