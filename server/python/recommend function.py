@@ -1,12 +1,13 @@
 import json as js
 import nltk
 import numpy
+
 class movie:
     genre = []
     cast = []
     crew = []
     company = []
-    spoken_lauguages = []
+    spoken_languages = []
     keys = []
     keyword=[]
     root=set()
@@ -16,7 +17,10 @@ class movie:
     revenue = 0
     runtime = 0
     popularity = 0
+    all_command_satisfied = False
+    similarity_score = 0
     recommend_score = 0
+    satisfied_score = 0
 
     def __init__(self,iD,GEN,CAST,CREW,COMPANY,KEY,LANGUAGE,RUNTIME,REVENUE,VOTE,VOTENUM,POP):
         self.ID=iD
@@ -25,7 +29,7 @@ class movie:
         self.crew=CREW.copy()
         self.company=COMPANY.copy()
         self.keys=KEY.copy()
-        self.spoken_lauguages=LANGUAGE.copy()
+        self.spoken_languages=LANGUAGE.copy()
         self.runtime=RUNTIME
         self.revenue=REVENUE
         self.rate_average=VOTE
@@ -34,6 +38,9 @@ class movie:
         self.keyword=[]
         self.root=set()
         self.recommend_score = 0
+        self.all_command_satisfied = False
+        self.similarity_score = 0
+        self.satisfied_score = 0
 
 all_movies = []
 
@@ -58,7 +65,6 @@ test=all_movies[0].keyword
 from nltk.stem import PorterStemmer
 from nltk.stem import SnowballStemmer
 stemmer=PorterStemmer()
-print(stemmer.stem(''))
 
 def extract_root(keyword_list):
     root=set()
@@ -121,17 +127,20 @@ def genre_compare(film,data_list):
     same_set=set(film.genre).intersection(set(data_list))
     return len(same_set)
 
-def staff_compare(film,cast_list,crew_list):
+def cast_compare(film,cast_list):
     same_set1=set(film.cast).intersection(set(cast_list))
-    same_set2=set(film.crew).intersection(set(crew_list))
-    return (len(same_set1)+len(same_set2))
+    return len(same_set1)
+
+def crew_compare(film,crew_list):
+    same_set1=set(film.crew).intersection(set(crew_list))
+    return len(same_set1)
 
 def company_compare(film,data_list):
     same_set=set(film.company).intersection(set(data_list))
     return len(same_set)
 
 def language_compare(film,data_list):
-    same_set=set(film.spoken_lauguages).intersection(set(data_list))
+    same_set=set(film.spoken_languages).intersection(set(data_list))
     return len(same_set)
 
 #推荐函数在这里写
@@ -141,24 +150,34 @@ def recommendation(users_data):
     u_crew=users_data['crew'].copy()
     u_company=users_data['production_companies'].copy()
     u_keywords=users_data['keywords'].copy()
-    u_spoken_languages=users_data['spoken_languages'].copy()
+    u_spoken_languages=users_data['spoken_languages'].copy() 
+    genre_command=(len(u_genre)>0)
+    cast_command=(len(u_cast)>0)
+    crew_command=(len(u_crew)>0)
+    company_command=(len(u_company)>0)
+    keywords_command=(len(u_keywords)>0)
+    language_command=(len(u_spoken_languages)>0)
     for x in all_movies:
         genre_similarity=genre_compare(x,u_genre)
-        staff_similarity=staff_compare(x,u_cast,u_crew)
+        cast_similarity=cast_compare(x,u_cast)
+        crew_similarity=crew_compare(x,u_crew)
         company_similarity=company_compare(x,u_company)
         language_similarity=language_compare(x,u_spoken_languages)
         keyword_similarity=keyword_compare(x,u_keywords)
         #权重部分
-        similarity_score=(3*genre_similarity+1.5*staff_similarity+company_similarity+2*language_similarity+keyword_similarity)
-        x.recommend_score=similarity_score*(x.rate_average if x.rate_count>500 else x.rate_average-((500-x.rate_count/500)*2))+x.popularity/50
+        x.similarity_score=(2*genre_similarity+cast_similarity+crew_similarity+company_similarity+2*language_similarity+keyword_similarity)
+        x.recommend_score=x.similarity_score*(((x.rate_average-5)*5) if x.rate_count>500 else ((x.rate_average-((500-x.rate_count/500)*2)-5)*5))+x.popularity/40
 
-    all_movies.sort(key=lambda x:x.recommend_score, reverse=True)
+        x.satisfied_score=(genre_command and genre_similarity>0)+(cast_command and cast_similarity>0)+(crew_command and crew_similarity>0)+(company_command and company_similarity>0)+(language_command and language_similarity>0)+(keywords_command and keyword_similarity>0)     
+        x.all_command_satisfied=((genre_command+cast_command+crew_command+company_command+language_command+keywords_command)==x.satisfied_score)
+   
+    from operator import attrgetter
+    #所有输入要求都满足的最先排，然后是要求满足的越多越好，然后是推荐评分
+    all_movies.sort(key=attrgetter('all_command_satisfied','satisfied_score','recommend_score'),reverse=True)
     recommend_list=[]
     for x in range(10):
         recommend_list.append(all_movies[x].ID)
     return recommend_list
 
 input_json = js.loads(input())
-import sys
-sys.stderr.write(js.dumps(input_json))
 print(recommendation(input_json))
