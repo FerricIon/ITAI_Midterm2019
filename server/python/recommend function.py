@@ -176,11 +176,11 @@ cffile_w=js.dumps(cf_BasedOnMovie_sim)
 cmsf.write(cffile_w)
 cmsf.close()
 '''
-cmsf=open('../data/cf_BasedOnMovie_sim.json','r')
-cf_base=js.loads(cmsf)
-cmsf.close()
-cf_recommendList={}
 def cf_recommend(input_movieID_list):
+    cmsf=open('../data/cf_finalRcommend.json','r')
+    cf_base=js.loads(cmsf)
+    cmsf.close()
+    cf_recommendList={}
     for input_movieID in input_movieID_list:
         for options_movie in cf_base[input_movieID]:
             if options_movie[0] in cf_recommendList.keys():
