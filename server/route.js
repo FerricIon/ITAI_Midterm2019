@@ -5,33 +5,38 @@ const processor = require('./lib/processor')
 
 const router = new Router()
 
-router.get('/api/genres', (ctx) => {
-  ctx.body = [...loader.genres()]
+router.get('/api/genres', async (ctx) => {
+  ctx.body = await loader.allGenres()
 })
-router.get('/api/keywords', (ctx) => {
-  ctx.body = [...loader.keywords()]
-})
-router.get('/api/production-companies', (ctx) => {
-  ctx.body = [...loader.productionCompanies()]
-})
-router.get('/api/spoken-languages', (ctx) => {
-  ctx.body = loader.spokenLanguages()
+router.get('/api/keywords', async (ctx) => {
+  ctx.body = await loader.allKeywords()
 })
 
-router.get('/api/genre-distribution', (ctx) => {
-  ctx.body = processor.getGenreDistribution(loader.visualization())
+router.get('/api/genre-distribution', async (ctx) => {
+  ctx.body = await processor.getGenreDistribution()
 })
-router.get('/api/keyword-distribution', (ctx) => {
-  ctx.body = processor.getKeywordDistribution(loader.visualization())
+router.get('/api/keyword-distribution', async (ctx) => {
+  ctx.body = await processor.getKeywordDistribution()
 })
 
-router.get('/api/search-credit', (ctx) => {
-  ctx.body = processor.searchForCredit(ctx.query.word)
+router.get('/api/search-credit', async (ctx) => {
+  ctx.body = await processor.searchCredit(ctx.query.word)
 })
-router.get('/api/recommendation1', (ctx) => {
-  ctx.body = processor.recommendation1(ctx.query.data)
+router.get('/api/search-production-company', async (ctx) => {
+  ctx.body = await processor.searchProductionCompany(ctx.query.word)
 })
-router.get('/api/get-movie', (ctx) => {
-  ctx.body = processor.rec1GetMovie(parseInt(ctx.query.id))
+router.get('/api/search-movie', async (ctx) => {
+  ctx.body = await processor.searchMovie(ctx.query.word)
+})
+
+router.get('/api/movie', async (ctx) => {
+  ctx.body = await loader.loadMovie(ctx.query.id)
+})
+
+router.get('/api/simple-filtering', (ctx) => {
+  ctx.body = processor.simpleFiltering(ctx.query.data)
+})
+router.get('/api/collaborative-filtering', (ctx) => {
+  ctx.body = processor.collaborativeFiltering(ctx.query.data)
 })
 module.exports = router

@@ -18,12 +18,10 @@ export default {
     'v-chart': ECharts
   },
   async asyncData({ $axios }) {
-    const genres = new Map((await $axios.get('/api/genres')).data)
-    const keywords = new Map((await $axios.get('/api/keywords')).data)
-    const genreDistributionData = (await $axios.get('/api/genre-distribution')).data
-    // eslint-disable-next-line
-    console.log(genreDistributionData)
-    const keywordDistributionData = (await $axios.get('/api/keyword-distribution')).data
+    const genres = new Map((await $axios.$get('/api/genres')).map(({ id, genre }) => ([ id, genre ])))
+    const keywords = new Map((await $axios.$get('/api/keywords')).map(({ id, keyword }) => ([ id, keyword ])))
+    const genreDistributionData = await $axios.$get('/api/genre-distribution')
+    const keywordDistributionData = await $axios.$get('/api/keyword-distribution')
 
     return {
       genreDistribution: {
@@ -49,9 +47,10 @@ export default {
       keywordDistribution: {
         baseOption: {
           timeline: {
-            data: keywordDistributionData.map((o) => {
-              return o.decade
-            }),
+            data: keywordDistributionData.map(({ decade }) => ({
+              value: parseInt(decade),
+              tooltip: false
+            })),
             label: {
               formatter(value, index) {
                 return value.toString()
@@ -83,7 +82,8 @@ export default {
                 }
               }),
               sizeRange: [10, 60],
-              rotationStep: 30
+              rotationStep: 10,
+              rotationRange: [-30, 30]
             }
           }
         })

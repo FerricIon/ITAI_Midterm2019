@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-test",
+  "name": "ITAI-2019",
   "version": "1.0.0",
   "description": "My first-rate Nuxt.js project",
   "author": "Ferric",
@@ -21,9 +21,11 @@
     "fs-extra": "^7.0.1",
     "koa": "^2.6.2",
     "koa-router": "^7.4.0",
+    "mariadb": "^2.0.5",
     "nuxt": "^2.4.0",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "sequelize": "^5.8.6",
     "vue-echarts": "^4.0.2",
     "vue-router": "3.0.6",
     "vuetify": "^1.5.5",
@@ -48,6 +50,7 @@
     "eslint-plugin-vue": "^5.2.2",
     "nodemon": "^1.18.9",
     "prettier": "^1.16.4",
+    "progress": "^2.0.3",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2"
   }

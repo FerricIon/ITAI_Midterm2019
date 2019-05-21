@@ -80,3 +80,9 @@ dist
 
 # Service worker
 sw.*
+
+# Posters
+static/posters/
+
+# Raw Data
+csv/
