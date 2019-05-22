@@ -24,7 +24,31 @@ async function allKeywords() {
  */
 async function loadMovie(id) {
   const data = await db.Movie.findOne({
-    where: { id }
+    where: { id },
+    include: [
+      {
+        model: db.Genre,
+        attributes: ['genre']
+      },
+      {
+        model: db.Keyword,
+        attributes: ['keyword']
+      },
+      {
+        model: db.ProductionCompany,
+        attributes: ['name']
+      },
+      {
+        model: db.Credit,
+        as: 'crew',
+        attributes: ['name']
+      },
+      {
+        model: db.Credit,
+        as: 'cast',
+        attributes: ['name']
+      }
+    ]
   })
   return data
 }
