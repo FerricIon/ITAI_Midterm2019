@@ -164,6 +164,21 @@ function collaborativeFiltering(data) {
     return stdout.toString()
   }
 }
+function rateForecast(data) {
+  const { spawnSync } = require('child_process')
+  const fileName = 'Rate Forecast.py'
+
+  const { stdout, stderr } = spawnSync('python', [fileName], {
+    cwd: './server/python',
+    input: data
+  })
+  // if (stderr.length) {
+  //   console.error(`Error in '${fileName}':\n${stderr.toString()}`)
+  //   return 'error'
+  // } else {
+  return stdout.toString()
+  // }
+}
 
 module.exports = {
   getGenreDistribution,
@@ -174,5 +189,6 @@ module.exports = {
   searchProductionCompany,
 
   simpleFiltering,
-  collaborativeFiltering
+  collaborativeFiltering,
+  rateForecast
 }

@@ -39,4 +39,7 @@ router.get('/api/simple-filtering', (ctx) => {
 router.get('/api/collaborative-filtering', (ctx) => {
   ctx.body = processor.collaborativeFiltering(ctx.query.data)
 })
+router.get('/api/rate-forecast', (ctx) => {
+  ctx.body = processor.rateForecast(ctx.query.data)
+})
 module.exports = router
