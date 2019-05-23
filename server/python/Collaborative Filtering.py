@@ -8,7 +8,7 @@ def cf_recommend(input_movieID_list):
     cf_recommendList={}
     for input_movieID in input_movieID_list:
         for options_movie in cf_base[str(input_movieID)]:
-            if options_movie[0] in input_movieID_list:
+            if int(options_movie[0]) in input_movieID_list:
                 continue
             if options_movie[0] in cf_recommendList.keys():
                 cf_recommendList[options_movie[0]]+=options_movie[1]
