@@ -1,4 +1,5 @@
 import json as js
+#将协同过滤所得相似矩阵整合进简单过滤所得的前四十推荐列表的相似度数值中，重新排一次序，{movieID: [[movieID, sim], ...], ...}导出至cf_recommend_BasedOnMovie.json
 mfile=open('cf_recommend_BasedOnMovie.json','r')
 pre_recommend=js.load(mfile)
 mfile.close()
