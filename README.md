@@ -1,49 +1,53 @@
-# ITAI Midterm 2019
+# Movie Data Analysis and A Model of Movie Commendation
 
-## 作业要求
+This repository is for our [website](http://104.248.157.18:3000/). Issues are welcomed.
 
-### 电影数据分析及可视化
+## How to run it locally
+### Environment Requirement
+- Node.js
+- Python3
+- MariaDB
 
-- > 各类型电影分布，统计数量排名前5的电影
-  统计数量排名前5的电影（类型）？
-- > 各类型电影随时间的变化
-  各类型电影（数量）随时间的变化？
-- > 电影关键字分析，生成词云图，以10年为间隔分析关键字变化趋势
-  应该没什么问题
+### Dependencies
+#### Python
+`pip install -r requirements.txt`
+Including
+- nltk
+- numpy
+- tensorflow
 
-### 电影推荐（默认推荐10部电影）
+Besides, you need to install NLTK Corpus Wordnet according to the [manual](https://www.nltk.org/data.html).
+For example, run this command after installing the dependencies.
+`python -m nltk.downloader wordnet`
 
-- > 基于内容：可根据类型、演职员、分数推荐电影
-  需要哪些数据？
-  | 类型 | 比较好做，推荐时应需要完全匹配 |
-  | 演职员 | 包含该演职员即可？如果可以的话能删掉小分量演职员最好 |
-  | 制片公司 | 推荐电影的时候需要考虑这个嘛 |
-  | 关键词 | 也许可以让用户输入关键词，但是关键词个数太多，需要一些处理 |
-  | 简介 | 同上，这两方面可以像kaggle上的方法弄 |
-  关于权重
-  | 分数 | 用户总评分越高越好？可以和用户评分数加权参考 |
-  | 收入（应该就是票房吧） | 大的会有更高的权重？ |
-  | 上映时间 | 早的好还是晚的好还是没有影响？ |
-  权重可能需要一个公式给出
-- > 协同过滤：根据用户的相似度进行推荐（需自己寻找用户数据集）
-  去哪爬数据呢……
+#### Node.js
+`yarn` or `npm install`
 
-### 电影分数预测
+### Data Import
+Due to the fact that we use MariaDB as our database, you need to import data in.
+- Go to directory `/server/data/`
+- Log in your MariaDB
+- Run `source sql.sql`
+We have crawled the posters needed for better user interface. Download [posters.zip](http://104.248.157.18:3000/posters.zip) and unzip to `/static/posters/`.
 
-- > 输入一部电影，预测电影的vote
-  也许最简单的方法就是随便搞一个nn扔进去跑……
-  所以哪些数据会影响电影的评分呢
-  预算，类型，关键词，（简介怎么处理？），制片公司（国家应该不会影响），发布日期，收入，时长，演职员（的哪些信息？）
+### Configure
+You may need to enter correct username and password to connect to MariaDB.
+Config at `/server/lib/db.js`.
 
-# 使用
-```
-npm install
-npm run build
-npm start
-```
-or
-```
-yarn
+### Run
+```bash
 yarn build
 yarn start
 ```
+or
+```bash
+npm run build
+npm  start
+```
+
+## Possible Issues
+- The recommendation and rate forecast don't work?
+  Please check your python version and whether the dependencies have been installed correctly. Note that the backend calls `python` directly other than `python3` or check the version. Can be modified in `/server/lib/processor.js`.
+
+## More Information
+Refer to the `READNE.md`s in the folders (but only `/server/` needs revision }:\\).

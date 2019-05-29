@@ -83,6 +83,3 @@ sw.*
 
 # Posters
 static/posters/
-
-# Raw Data
-csv/

@@ -78,7 +78,7 @@ v-card
                 v-list-tile-avatar
                   v-icon mdi-fountain-pen-tip
                 v-list-tile-content
-                  v-list-tile-title Crew (Director & Editor)
+                  v-list-tile-title Crew
               v-item(v-for="{ name } in movie.crew", :key="name")
                 v-chip {{ name }}
 </template>

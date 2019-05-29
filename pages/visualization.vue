@@ -31,6 +31,12 @@ export default {
         tooltip: {
           formatter: '{b}: {c}({d}%)'
         },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {}
+          }
+        },
         series: [
           {
             name: 'Count',
@@ -64,6 +70,12 @@ export default {
           },
           tooltip: {
             formatter: '{b}: {c}'
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              saveAsImage: {}
+            }
           },
           series: []
         },
@@ -116,6 +128,12 @@ export default {
         },
         dataZoom: {
           xAxisIndex: [0]
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {}
+          }
         },
         series: genreDistributionData.map(({ id, distribution }) => ({
           name: genres.get(id),

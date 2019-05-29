@@ -172,12 +172,12 @@ function rateForecast(data) {
     cwd: './server/python',
     input: data
   })
-  // if (stderr.length) {
-  //   console.error(`Error in '${fileName}':\n${stderr.toString()}`)
-  //   return 'error'
-  // } else {
-  return stdout.toString()
-  // }
+  if (stderr.length) {
+    console.error(`Error in '${fileName}':\n${stderr.toString()}`)
+    return 'error'
+  } else {
+    return stdout.toString()
+  }
 }
 
 module.exports = {
