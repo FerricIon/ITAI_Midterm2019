@@ -1,5 +1,6 @@
 import csv
 import json as js
+#将csv格式数据表转为{movieID: {userID: Rating, ...}, ...}的json文件, cf_userInit.json
 def csv_to_mur():
     with open('ratingsg.csv','r') as mfile:
         umr=csv.reader(mfile)
@@ -18,6 +19,7 @@ def csv_to_mur():
                 umark=line[0]
         with open('cf_userInit.json','w') as out:
             out.write(js.dumps(data))
+#用csv格式数据表计算每个用户的平均给分，导出{userID: Rating, ...}的json文件, cf_userAve.json
 def csv_to_ave():
     with open('ratingsg.csv','r') as mfile:
         umr=csv.reader(mfile)

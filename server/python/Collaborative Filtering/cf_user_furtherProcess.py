@@ -7,6 +7,7 @@ file1.close()
 file2.close()
 data={}
 a=0
+#协同过滤主体步骤，使用相似度计算公式生成“电影-电影”相似矩阵，导出至cf_matrix_BasedonUser.json
 for mid1 in mur.keys():
     for mid2 in mur.keys():
         if mid1<mid2:
@@ -15,7 +16,7 @@ for mid1 in mur.keys():
             a2=0
             a3=0
             for uid in comUser:
-                a1+=(mur[mid1][uid]-ave[uid])*(mur[mid2][uid]-ave[uid])
+                a1+=(mur[mid1][uid]-ave[uid])*(mur[mid2][uid]-ave[uid]) #每个打分要减去对应用户平均给分，矫正各个用户总体打分高低不同的偏差
                 a2+=(mur[mid1][uid]-ave[uid])**2
                 a3+=(mur[mid2][uid]-ave[uid])**2
             if mid1 not in data.keys():
