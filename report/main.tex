@@ -127,18 +127,19 @@ $$ sim(m_1,m_2)=\frac{\sum_u{(R_{um_1}-R_u)(R_{um_2}-R_u)}}{\sqrt{\sum_u{(R_{um_
 \end{figure}
 \par 设置50的耐心度后，训练在大约440个epoch后提前停止，此时从所有数据中随机抽取出的10\%测试集上MSE Loss约为0.7，即与实际评分差异均值约为0.8，相对而言可以接受。而在TMDB上选取的若干新电影上的测试，具有相似表现，因此可以认为是可接受的训练结果。
 \par
-\centering
-\begin{tabular}{cccc}
-\hline
-TMDB ID& Title& Real Rating& Forecast\\
-\hline
-447404& Pokémon Detective Pikachu& 7.0& 6.12\\
-299534& Avengers: Endgame& 8.5& 8.31\\
-284052& Doctor Strange& 7.3& 7.57\\
-313369& La La Land& 7.9& 7.20\\
-274870& Passengers& 6.8& 6.75\\
-\hline
-\end{tabular}
+\begin{center}
+  \begin{tabular}{cccc}
+    \hline
+    TMDB ID& Title& Real Rating& Forecast\\
+    \hline
+    447404& Pokémon Detective Pikachu& 7.0& 6.12\\
+    299534& Avengers: Endgame& 8.5& 8.31\\
+    284052& Doctor Strange& 7.3& 7.57\\
+    313369& La La Land& 7.9& 7.20\\
+    274870& Passengers& 6.8& 6.75\\
+    \hline
+  \end{tabular}
+\end{center}
 \section{总结}
 \par 通过本次作业，我组同学了解并参与实践了实际的数据处理、挖掘工作，也接触了如数据库管理、协同过滤算法、神经网络等比较成熟可靠的方法，经历了一次“小科研”，可以说是收获颇丰。但仍有一些可以提升的空间，如尝试从电影中挖掘更多信息，进一步调整神经网络结构以达到更好效果，查阅参考前任文献资料等。相信有了这次宝贵经验，我们会在以后的工作中做得更好。
 
