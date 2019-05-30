@@ -1,8 +1,10 @@
 import tensorflow as tf
 import numpy as np
 import json
-import tensorflow.python.util.deprecation as deprecation
+import os
+from tensorflow.python.util import deprecation
 deprecation._PRINT_DEPRECATION_WARNINGS = False
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 ids = {}
 for d in ['cast', 'crew', 'genre', 'company']:
