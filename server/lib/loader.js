@@ -40,11 +40,6 @@ async function loadMovie(id) {
       },
       {
         model: db.Credit,
-        as: 'crew',
-        attributes: ['name']
-      },
-      {
-        model: db.Credit,
         as: 'cast',
         attributes: ['name']
       }

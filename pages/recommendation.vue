@@ -1,6 +1,6 @@
 <template lang="pug">
-v-layout(row, wrap)
-  v-flex(xs4)
+v-layout(:row="$vuetify.breakpoint.lgAndUp", :column="$vuetify.breakpoint.mdAndDown", wrap)
+  v-flex(lg4)
     v-autocomplete(
       v-model="form1.genre.model",
       :items="form1.genre.items",
@@ -36,7 +36,7 @@ v-layout(row, wrap)
     )
     v-text-field(v-model="form1.keyword.model", label="Keywords")
     v-btn(color="info", @click="queryForm1") Query
-  v-flex(xs8)
+  v-flex(lg8)
     v-container(grid-list-md, fluid, fill-height)
       v-layout(align-center, justify-center, fill-height, wrap)
         v-progress-circular(v-if="form1.loadingResult", indeterminate, color="info")

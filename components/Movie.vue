@@ -73,14 +73,6 @@ v-card
                   v-list-tile-title Cast
               v-item(v-for="{ name } in movie.cast", :key="name")
                 v-chip {{ name }}
-            v-item-group
-              v-list-tile
-                v-list-tile-avatar
-                  v-icon mdi-fountain-pen-tip
-                v-list-tile-content
-                  v-list-tile-title Crew
-              v-item(v-for="{ name } in movie.crew", :key="name")
-                v-chip {{ name }}
 </template>
 
 <script>

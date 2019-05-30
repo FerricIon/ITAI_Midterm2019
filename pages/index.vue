@@ -1,21 +1,7 @@
 <template>
   <div>
-    <center>
-      <h1 id="电影数据分析和电影推荐模型">
-        电影数据分析和电影推荐模型
-      </h1>
-      <p>组员：张开、郑钦源、张屹洋</p>
-    </center>
-    <p>根据课程要求，本次作业完成的部分有三：数据可视化、电影推荐、评分预测。其中数据可视化“关键词”部分要求进行不同时间的比较，而词云图又不便于在同一图表上叠加，因此动态图表可能是更好的一种选择。考虑到各种图标工具的易用性、效果好坏、交互等方面，我组确定使用某种前端库作为数据可视化的工具，并整体搭建网页，以给电影推荐、评分预测两项带来更好的用户体验。</p>
-    <p>作业给定的数据是 Kaggle 上的 csv 文件，其中共包括 4803 部电影，首先要做的就是筛选出与作业相关的域。考虑到 csv 文件中部分列已经为 JSON 格式，为了方便后续操作，首先将两表合并，并导出为JSON格式。其后我组进行了一些讨论，并最终确定各小项所需域：</p>
-    <ul>
-      <li>数据可视化：类型、关键词、发行日期</li>
-      <li>简单过滤：类型、演职员、制片公司、关键词</li>
-      <li>评分预测：类型、预算、票房、时长、发行日期、演职员、制片公司</li>
-    </ul>
-    <p>由此将原 JSON 进行分割，各取所需，减少读取所需时长。</p>
-    <p>此外，留意到原数据中对 JSON 的类型、关键词、制片公司、演职员已经分配了各自独占的 ID ，因此可以分拆出这些域的 ID 与详情对应关系，在总表中只保留ID，需要时再进行查询。这样进一步减小了 JSON 文件的大小，也让数据的表示变得更加简单。</p>
-    <p>网页方面，为了简单起见，选择 Nuxt.js 制作 SPA ，并使用 koa 作为后端以提供用户交互。</p>
+    <p>Github Repository: <a href="https://github.com/FerricIon/ITAI_Midterm2019">https://github.com/FerricIon/ITAI_Midterm2019</a></p>
+    <p>Report: <a href="https://github.com/FerricIon/ITAI_Midterm2019/blob/master/report/main.pdf">https://github.com/FerricIon/ITAI_Midterm2019/blob/master/report/main.pdf</a></p>
   </div>
 </template>
 

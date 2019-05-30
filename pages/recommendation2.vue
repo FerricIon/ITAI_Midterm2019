@@ -1,6 +1,6 @@
 <template lang="pug">
-v-layout(row, wrap)
-  v-flex(xs4)
+v-layout(:row="$vuetify.breakpoint.lgAndUp", :column="$vuetify.breakpoint.mdAndDown", wrap)
+  v-flex(lg4)
     v-autocomplete(
       v-model="userMovies.model",
       :loading="userMovies.loading",
@@ -10,11 +10,11 @@ v-layout(row, wrap)
       multiple,
       cache-items
     )
-    v-container(grid-list-sm, fluid, fill-height)
+    v-container(v-if="$vuetify.breakpoint.lgAndUp", grid-list-sm, fluid, fill-height)
       v-layout(row, wrap)
-        v-flex(md12, lg6, v-for="(movie, ind) in userMovies.model", :key="movie")
+        v-flex(xs12, sm6, md4, lg6 v-for="(movie, ind) in userMovies.model", :key="movie")
           v-movie(:movie-id="movie", closable, @close="userMovies.model.splice(ind, 1)")
-  v-flex(xs8)
+  v-flex(lg8)
     v-container(grid-list-md, fluid, fill-height)
       v-layout(align-center, justify-center, fill-height, wrap)
         v-progress-circular(v-if="loadingResult", indeterminate, color="info")

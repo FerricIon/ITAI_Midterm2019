@@ -1,6 +1,7 @@
 [
   {
-    "title": "Avengers: Endgame",
+    "title": "Pokémon Detective Pikachu",
+    "vote_average": 7,
     "budget": 150000000,
     "revenue": 296246846,
     "runtime": 105,
@@ -37,7 +38,8 @@
     ]
   },
   {
-    "title": "Pokémon Detective Pikachu",
+    "title": "Avengers: Endgame",
+    "vote_average": 8.5,
     "budget": 356000000,
     "revenue": 2677472736,
     "runtime": 181,
@@ -63,6 +65,62 @@
     ],
     "company": [
       5888
+    ]
+  },
+  {
+    "title": "Doctor Strange",
+    "vote_average": 7.3,
+    "budget": 166000000,
+    "revenue": 677718395,
+    "runtime": 115,
+    "releaseYear": 2017,
+    "genre": [
+      28,
+      12,
+      14,
+      878
+    ],
+    "cast": [
+      71580,
+      1019,
+      5294,
+      53714,
+      30082
+    ],
+    "crew": [
+      55499,
+      928106,
+      564940
+    ],
+    "company": [
+      420
+    ]
+  },
+  {
+    "title": "La La Land",
+    "vote_average": 7.9,
+    "budget": 30000000,
+    "revenue": 445435700,
+    "runtime": 129,
+    "releaseYear": 2017,
+    "genre": [
+      35,
+      18,
+      10749
+    ],
+    "cast": [
+      30614,
+      54693,
+      113461,
+      18999
+    ],
+    "crew": [
+      136495,
+      1253687,
+      1419631
+    ],
+    "company": [
+      35
     ]
   }
 ]

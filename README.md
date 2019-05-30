@@ -2,6 +2,9 @@
 
 This repository is for our [website](http://104.248.157.18:3000/). Issues are welcomed.
 
+## Information for Teachers
+The core code you need to review are placed at `/server`. Please refer to `/server/README.md`.
+
 ## How to run it locally
 ### Environment Requirement
 - Node.js
@@ -50,4 +53,4 @@ npm  start
   Please check your python version and whether the dependencies have been installed correctly. Note that the backend calls `python` directly other than `python3` or check the version. Can be modified in `/server/lib/processor.js`.
 
 ## More Information
-Refer to the `READNE.md`s in the folders (but only `/server/` needs revision }:\\).
+Refer to the `READNE.md`s in the folders (though only `/server/` needs revision }:\\).

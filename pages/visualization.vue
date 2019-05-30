@@ -1,10 +1,10 @@
 <template lang="pug">
-v-layout(row, wrap)
-  v-flex.echart-container(xs4)
-    v-chart(:options="genreDistribution", autoresize, @click="displaySingleTrend")
-  v-flex.echart-container(xs8)
-    v-chart(:options="keywordDistribution", autoresize)
-  v-flex.echart-container(xs12)
+v-layout(:row="$vuetify.breakpoint.lgAndUp", :column="$vuetify.breakpoint.mdAndDown", wrap)
+  v-flex(lg4, :class="echartBoxClass")
+    v-chart(:options="genreDistribution", autoresize, @click="displaySingleTrend", ref="genreDistribution")
+  v-flex(lg8, :class="echartBoxClass")
+    v-chart(:options="keywordDistribution", autoresize, ref="keywordDistribution")
+  v-flex(lg12, :class="echartBoxClass")
     v-chart(:options="genreTrend", autoresize, ref="genreTrend")
 </template>
 
@@ -17,12 +17,7 @@ export default {
   components: {
     'v-chart': ECharts
   },
-  async asyncData({ $axios }) {
-    const genres = new Map((await $axios.$get('/api/genres')).map(({ id, genre }) => ([ id, genre ])))
-    const keywords = new Map((await $axios.$get('/api/keywords')).map(({ id, keyword }) => ([ id, keyword ])))
-    const genreDistributionData = await $axios.$get('/api/genre-distribution')
-    const keywordDistributionData = await $axios.$get('/api/keyword-distribution')
-
+  data() {
     return {
       genreDistribution: {
         title: {
@@ -31,32 +26,20 @@ export default {
         tooltip: {
           formatter: '{b}: {c}({d}%)'
         },
-        toolbox: {
-          show: true,
-          feature: {
-            saveAsImage: {}
-          }
-        },
         series: [
           {
             name: 'Count',
             type: 'pie',
             radius: '40%',
             center: ['50%', '50%'],
-            data: genreDistributionData.map(({ id, count }) => ({
-              name: genres.get(id),
-              value: count
-            }))
+            data: []
           }
         ]
       },
       keywordDistribution: {
         baseOption: {
           timeline: {
-            data: keywordDistributionData.map(({ decade }) => ({
-              value: parseInt(decade),
-              tooltip: false
-            })),
+            data: [],
             label: {
               formatter(value, index) {
                 return value.toString()
@@ -71,15 +54,79 @@ export default {
           tooltip: {
             formatter: '{b}: {c}'
           },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {}
-            }
-          },
           series: []
         },
-        options: keywordDistributionData.map(({ distribution }) => {
+        options: []
+      },
+      genreTrend: {
+        title: {
+          text: 'Genre Trend'
+        },
+        tooltip: {},
+        legend: {
+          show: true,
+          type: 'scroll',
+          animation: true,
+          orient: 'vertical',
+          top: '10%',
+          right: 0,
+          data: []
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          boundaryGap: false
+        },
+        yAxis: {
+          type: 'value',
+          scale: true
+        },
+        grid: {
+          right: 200
+        },
+        dataZoom: {
+          xAxisIndex: [0]
+        },
+        series: []
+      }
+    }
+  },
+  computed: {
+    echartBoxClass() {
+      return [this.$vuetify.breakpoint.lgAndUp ? 'echart-box-lg' : 'echar-box-md']
+    }
+  },
+  mounted() {
+    this.$refs.genreDistribution.showLoading()
+    this.$refs.keywordDistribution.showLoading()
+    this.$refs.genreTrend.showLoading()
+    this.$axios.$get('/api/genres').then((data) => {
+      const genres = new Map(data.map(({ id, genre }) => ([id, genre])))
+      this.genreTrend.legend.data = [...genres].map(([id, genre]) => genre).sort()
+      this.$axios.$get('/api/genre-distribution').then((data) => {
+        this.genreDistribution.series[0].data = data.map(({ id, count }) => ({
+          name: genres.get(id),
+          value: count
+        }))
+        this.$refs.genreDistribution.hideLoading()
+        this.genreTrend.xAxis.data = data[0].distribution.map(({ decade }) => decade)
+        this.genreTrend.series = data.map(({ id, distribution }) => ({
+          name: genres.get(id),
+          type: 'line',
+          data: distribution.map(({ decade, count }) => count),
+          smooth: true
+        }))
+        this.$refs.genreTrend.hideLoading()
+      })
+    })
+    this.$axios.$get('/api/keywords').then((data) => {
+      const keywords = new Map(data.map(({ id, keyword }) => ([id, keyword])))
+      this.$axios.$get('/api/keyword-distribution').then((data) => {
+        this.keywordDistribution.baseOption.timeline.data = data.map(({ decade }) => ({
+          value: parseInt(decade),
+          tooltip: false
+        }))
+        this.keywordDistribution.options = data.map(({ distribution }) => {
           return {
             series: {
               title: '',
@@ -99,50 +146,9 @@ export default {
             }
           }
         })
-      },
-      genreTrend: {
-        title: {
-          text: 'Genre Trend'
-        },
-        tooltip: {},
-        legend: {
-          show: true,
-          type: 'scroll',
-          animation: true,
-          orient: 'vertical',
-          top: '10%',
-          right: 0,
-          data: [...genres].map(([id, genre]) => genre).sort()
-        },
-        xAxis: {
-          type: 'category',
-          data: genreDistributionData[0].distribution.map(({ decade }) => decade),
-          boundaryGap: false
-        },
-        yAxis: {
-          type: 'value',
-          scale: true
-        },
-        grid: {
-          right: 200
-        },
-        dataZoom: {
-          xAxisIndex: [0]
-        },
-        toolbox: {
-          show: true,
-          feature: {
-            saveAsImage: {}
-          }
-        },
-        series: genreDistributionData.map(({ id, distribution }) => ({
-          name: genres.get(id),
-          type: 'line',
-          data: distribution.map(({ decade, count }) => count),
-          smooth: true
-        }))
-      }
-    }
+        this.$refs.keywordDistribution.hideLoading()
+      })
+    })
   },
   methods: {
     displaySingleTrend(param) {
@@ -159,8 +165,11 @@ export default {
 </script>
 
 <style scoped>
-.echart-container {
+.echart-box-lg {
   height: 50%;
+}
+.echar-box-md {
+  height: 600px;
 }
 .echarts {
   height: 100%;

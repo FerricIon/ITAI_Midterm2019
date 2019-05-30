@@ -55,11 +55,13 @@ v-layout(column, wrap)
       template
         v-rating(readonly, x-large, center, half-increments, length="10", :value="rating", slot="activator")
       span {{ rating }}
-  v-dialog(v-model="jsonDialog", width=500)
+  v-dialog(v-model="jsonDialog", min-width="600px", width="60%")
     v-card
       v-card-title.headline.grey(primary-title) Paste JSON
       v-card-text
         p Note that 'Cast', 'Crew' and 'Production Company' may not display their name correctly. We don't have an api to query their names. }:\
+        p Sample Data:
+          a(href="https://github.com/FerricIon/ITAI_Midterm2019/blob/master/server/data/rate_test.json") https://github.com/FerricIon/ITAI_Midterm2019/blob/master/server/data/rate_test.json
         v-textarea(v-model="jsonTextarea", :rules="[rules.json]", ref="jsonPaste")
       v-card-actions
         v-btn(@click="pasteJSON") fill!
@@ -83,11 +85,10 @@ export default {
     },
     'company.search'(word) {
       if (!word) return
-      this.queryProductionCompany(word, this.productionCompany)
+      this.queryProductionCompany(word, this.company)
     }
   },
-  async asyncData({ $axios, $nuxt }) {
-    $nuxt.$loading.start()
+  async asyncData({ $axios }) {
     const data = {
       genre: {
         model: [],
@@ -144,7 +145,6 @@ export default {
       jsonDialog: false,
       jsonTextarea: ''
     }
-    $nuxt.$loading.finish()
     return data
   },
   methods: {
